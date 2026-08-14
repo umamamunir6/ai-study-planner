@@ -25,6 +25,11 @@ const Navbar = () => {
             AI Planner
           </Link>
 
+          {/* FE-06: Streaming AI Assistant */}
+          <Link href="/ai-assistant" className="hover:text-blue-600">
+            AI Assistant
+          </Link>
+
           <Link href="/subjects" className="hover:text-blue-600">
             Subjects
           </Link>
