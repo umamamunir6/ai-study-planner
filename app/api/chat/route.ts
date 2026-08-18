@@ -57,7 +57,7 @@ Use the returned tool data to answer the student.`,
           }
         : {}),
 
-      stopWhen: ({ steps }) => steps.length >= 3,
+      stopWhen: ({ steps }) => steps.length >= 2,
     });
 
     return result.toUIMessageStreamResponse();
