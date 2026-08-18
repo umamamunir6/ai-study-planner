@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import StudyProgressCard from "./StudyProgressCard";
 
 export default function AIChat() {
   const [input, setInput] = useState("");
@@ -16,11 +17,12 @@ export default function AIChat() {
     }),
   });
 
-  const isGenerating = status === "submitted" || status === "streaming";
+  const isGenerating =
+    status === "submitted" || status === "streaming";
 
   /*
-   * Check whether the user is currently near the bottom.
-   * If they scroll upward, automatic scrolling is released.
+   * Keep auto-scroll active only while the user
+   * is already near the bottom.
    */
   const handleScroll = () => {
     const container = messagesContainerRef.current;
@@ -36,8 +38,8 @@ export default function AIChat() {
   };
 
   /*
-   * Automatically follow the conversation while the user
-   * is already near the bottom.
+   * Follow new streamed content while the user
+   * is at the bottom.
    */
   useEffect(() => {
     if (!isNearBottom) return;
@@ -82,7 +84,7 @@ export default function AIChat() {
     <div className="ai-chat-page">
       <div className="ai-chat-card">
 
-        {/* Header */}
+        {/* HEADER */}
         <header className="ai-chat-header">
           <div>
             <h1>🤖 AI Study Assistant</h1>
@@ -95,7 +97,7 @@ export default function AIChat() {
           </div>
         </header>
 
-        {/* Messages */}
+        {/* MESSAGES */}
         <div
           className="ai-messages"
           ref={messagesContainerRef}
@@ -109,13 +111,15 @@ export default function AIChat() {
 
               <p>
                 Ask me to explain a topic, create a study plan,
-                prioritize your subjects, or help with an assignment.
+                check your study progress, or help with an assignment.
               </p>
 
               <div className="suggestion-list">
                 <button
                   onClick={() =>
-                    setInput("Explain binary search in simple words.")
+                    setInput(
+                      "Explain binary search in simple words."
+                    )
                   }
                 >
                   Explain binary search
@@ -123,7 +127,9 @@ export default function AIChat() {
 
                 <button
                   onClick={() =>
-                    setInput("Make me a study plan for my exams.")
+                    setInput(
+                      "Make me a study plan for my exams."
+                    )
                   }
                 >
                   Make a study plan
@@ -131,10 +137,12 @@ export default function AIChat() {
 
                 <button
                   onClick={() =>
-                    setInput("How should I prepare for a difficult exam?")
+                    setInput(
+                      "Show me my current study progress."
+                    )
                   }
                 >
-                  Exam preparation tips
+                  📊 Show my study progress
                 </button>
               </div>
             </div>
@@ -150,7 +158,9 @@ export default function AIChat() {
               }`}
             >
               <div className="message-label">
-                {message.role === "user" ? "You" : "🤖 AI Assistant"}
+                {message.role === "user"
+                  ? "You"
+                  : "🤖 AI Assistant"}
               </div>
 
               <div
@@ -161,12 +171,145 @@ export default function AIChat() {
                 }`}
               >
                 {message.parts.map((part, index) => {
+
+                  /*
+                   * NORMAL STREAMING TEXT
+                   */
                   if (part.type === "text") {
                     return (
-                      <span key={index} className="message-text">
+                      <span
+                        key={index}
+                        className="message-text"
+                      >
                         {part.text}
                       </span>
                     );
+                  }
+
+                  /*
+                   * FE-07 STUDY PROGRESS TOOL
+                   */
+                  if (
+                    part.type ===
+                    "tool-getStudyProgress"
+                  ) {
+
+                    /*
+                     * STATE 1:
+                     * Tool input is still streaming.
+                     */
+                    if (
+                      part.state ===
+                      "input-streaming"
+                    ) {
+                      return (
+                        <div
+                          key={index}
+                          className="tool-card tool-thinking"
+                        >
+                          <div className="tool-icon">
+                            ⚙️
+                          </div>
+
+                          <div>
+                            <strong>
+                              Checking study progress
+                            </strong>
+
+                            <p>
+                              Preparing the tool request...
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    /*
+                     * STATE 2:
+                     * Tool input is available and
+                     * execution is about to happen.
+                     */
+                    if (
+                      part.state ===
+                      "input-available"
+                    ) {
+                      return (
+                        <div
+                          key={index}
+                          className="tool-card tool-running"
+                        >
+                          <div className="tool-icon">
+                            🔍
+                          </div>
+
+                          <div>
+                            <strong>
+                              Checking study progress
+                            </strong>
+
+                            <p>
+                              Reading your study data...
+                            </p>
+
+                            <small>
+                              Tool: getStudyProgress
+                            </small>
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    /*
+                     * STATE 3:
+                     * Tool successfully returned data.
+                     */
+                    if (
+                      part.state ===
+                      "output-available"
+                    ) {
+                      return (
+                        <div key={index}>
+                          <div className="tool-success">
+                            ✓ Study progress retrieved
+                          </div>
+
+                          <StudyProgressCard
+                            data={part.output}
+                          />
+                        </div>
+                      );
+                    }
+
+                    /*
+                     * STATE 4:
+                     * Tool execution failed.
+                     */
+                    if (
+                      part.state ===
+                      "output-error"
+                    ) {
+                      return (
+                        <div
+                          key={index}
+                          className="tool-card tool-error"
+                        >
+                          <div className="tool-icon">
+                            ⚠️
+                          </div>
+
+                          <div>
+                            <strong>
+                              Couldn't load study progress
+                            </strong>
+
+                            <p>
+                              {part.errorText ||
+                                "The study progress tool failed. Please try again."}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    }
                   }
 
                   return null;
@@ -175,10 +318,12 @@ export default function AIChat() {
             </div>
           ))}
 
-          {/* Thinking indicator */}
+          {/* THINKING INDICATOR */}
           {status === "submitted" && (
             <div className="message-row assistant-row">
-              <div className="message-label">🤖 AI Assistant</div>
+              <div className="message-label">
+                🤖 AI Assistant
+              </div>
 
               <div className="message-bubble assistant-message thinking">
                 <span></span>
@@ -189,7 +334,7 @@ export default function AIChat() {
           )}
         </div>
 
-        {/* Jump to latest */}
+        {/* JUMP TO LATEST */}
         {!isNearBottom && (
           <button
             className="jump-latest"
@@ -199,16 +344,24 @@ export default function AIChat() {
           </button>
         )}
 
-        {/* Input */}
-        <form className="ai-input-area" onSubmit={handleSubmit}>
+        {/* INPUT */}
+        <form
+          className="ai-input-area"
+          onSubmit={handleSubmit}
+        >
           <textarea
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) =>
+              setInput(e.target.value)
+            }
             placeholder="Ask your AI study assistant..."
             rows={1}
             disabled={isGenerating}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
+              if (
+                e.key === "Enter" &&
+                !e.shiftKey
+              ) {
                 e.preventDefault();
 
                 if (!isGenerating) {
@@ -238,7 +391,8 @@ export default function AIChat() {
         </form>
 
         <p className="ai-disclaimer">
-          AI responses may occasionally be inaccurate. Verify important information.
+          AI responses may occasionally be inaccurate.
+          Verify important information.
         </p>
       </div>
     </div>

@@ -367,3 +367,188 @@ a {
     padding-bottom: 8px;
   }
 }
+/* ================================
+   FE-07 TOOL UI
+   ================================ */
+
+.tool-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  margin: 10px 0;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+}
+
+.tool-icon {
+  font-size: 22px;
+}
+
+.tool-card strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.tool-card p {
+  margin: 0;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.tool-card small {
+  display: block;
+  margin-top: 6px;
+  color: #94a3b8;
+}
+
+.tool-thinking {
+  border-left: 4px solid #94a3b8;
+}
+
+.tool-running {
+  border-left: 4px solid #3b82f6;
+}
+
+.tool-error {
+  border-left: 4px solid #ef4444;
+  background: #fef2f2;
+}
+
+.tool-success {
+  display: inline-block;
+  margin: 8px 0;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #ecfdf5;
+  color: #047857;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Study progress component */
+
+.study-progress-card {
+  margin-top: 10px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.progress-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.progress-header p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.progress-rate {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  margin-top: 16px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: #2563eb;
+  transition: width 0.3s ease;
+}
+
+.progress-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.progress-summary strong {
+  font-size: 20px;
+}
+
+.progress-summary span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.subject-progress {
+  margin-top: 18px;
+}
+
+.subject-progress h4 {
+  margin: 0 0 12px;
+  font-size: 15px;
+}
+
+.subject-row {
+  margin-bottom: 14px;
+}
+
+.subject-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+.subject-info span:last-child {
+  color: #64748b;
+}
+
+.subject-bar {
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e2e8f0;
+}
+
+.subject-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: #60a5fa;
+  transition: width 0.3s ease;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .study-progress-card {
+    padding: 14px;
+  }
+
+  .progress-header h3 {
+    font-size: 16px;
+  }
+
+  .progress-rate {
+    font-size: 23px;
+  }
+
+  .subject-info {
+    font-size: 12px;
+  }
+}
