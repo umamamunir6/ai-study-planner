@@ -274,7 +274,16 @@ export default function AIChat() {
                           </div>
 
                           <StudyProgressCard
-                            data={part.output}
+                            data={part.output as {
+          completedTasks: number;
+          totalTasks: number;
+          completionRate: number;
+          subjects: {
+            name: string;
+            completed: number;
+            total: number;
+          }[];
+        }}
                           />
                         </div>
                       );
