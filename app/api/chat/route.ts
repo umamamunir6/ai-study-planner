@@ -6,18 +6,41 @@ export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
 
+    const lastMessage = messages[messages.length - 1];
+
+    const userText =
+      lastMessage?.parts
+        ?.filter((part: any) => part.type === "text")
+        ?.map((part: any) => part.text)
+        ?.join(" ")
+        ?.toLowerCase() || "";
+
+    const askingForProgress =
+      userText.includes("progress") ||
+      userText.includes("completed tasks") ||
+      userText.includes("completion") ||
+      userText.includes("how much have i studied") ||
+      userText.includes("study status");
+
     const result = streamText({
       model: aiModel,
 
       system: `${systemPrompt}
 
-You have access to a study progress tool.
+You have access to a study progress tool called getStudyProgress.
 
-When the student asks about their current study progress,
-completed tasks, subject progress, or overall completion,
-use the getStudyProgress tool instead of guessing.
+When the student asks about:
+- current study progress
+- completed tasks
+- subject progress
+- overall completion
+- study status
 
-Do not invent study progress information.`,
+you MUST use getStudyProgress.
+
+Do NOT say that you cannot access the student's study progress.
+Do NOT invent study progress information.
+Use the returned tool data to answer the student.`,
 
       messages: await convertToModelMessages(messages),
 
@@ -25,10 +48,15 @@ Do not invent study progress information.`,
         getStudyProgress: studyProgressTool,
       },
 
-      /*
-       * Allow the model to call the tool and then continue
-       * responding with the tool result.
-       */
+      ...(askingForProgress
+        ? {
+            toolChoice: {
+              type: "tool" as const,
+              toolName: "getStudyProgress",
+            },
+          }
+        : {}),
+
       stopWhen: ({ steps }) => steps.length >= 3,
     });
 
