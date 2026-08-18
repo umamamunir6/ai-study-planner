@@ -6,22 +6,6 @@ export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
 
-    const lastMessage = messages[messages.length - 1];
-
-    const userText =
-      lastMessage?.parts
-        ?.filter((part: any) => part.type === "text")
-        ?.map((part: any) => part.text)
-        ?.join(" ")
-        ?.toLowerCase() || "";
-
-    const askingForProgress =
-      userText.includes("progress") ||
-      userText.includes("completed tasks") ||
-      userText.includes("completion") ||
-      userText.includes("how much have i studied") ||
-      userText.includes("study status");
-
     const result = streamText({
       model: aiModel,
 
@@ -47,17 +31,6 @@ Use the returned tool data to answer the student.`,
       tools: {
         getStudyProgress: studyProgressTool,
       },
-
-      ...(askingForProgress
-        ? {
-            toolChoice: {
-              type: "tool" as const,
-              toolName: "getStudyProgress",
-            },
-          }
-        : {}),
-
-      stopWhen: ({ steps }) => steps.length >= 2,
     });
 
     return result.toUIMessageStreamResponse();
