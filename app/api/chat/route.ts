@@ -5,7 +5,6 @@ import { studyProgressTool } from "@/lib/tools/studyProgress";
 export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
-
     const result = streamText({
       model: aiModel,
 
@@ -39,10 +38,10 @@ Use the returned tool data to answer the student.`,
 
     return new Response(
       JSON.stringify({
-        error: "Failed to generate AI response.",
+        error: "The AI service is temporarily unavailable. Please try again.",
       }),
       {
-        status: 500,
+        status: 503,
         headers: {
           "Content-Type": "application/json",
         },

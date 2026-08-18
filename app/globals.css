@@ -319,6 +319,7 @@ a {
 
   .ai-chat-card {
     height: 100vh;
+    min-height: 100dvh;
     border: none;
     border-radius: 0;
   }
@@ -550,5 +551,44 @@ a {
 
   .subject-info {
     font-size: 12px;
+  }
+}
+/* =========================================
+   FE-08 - Mobile Chat Improvements
+   ========================================= */
+
+@media (max-width: 640px) {
+  .ai-chat-page {
+    min-height: 100dvh;
+  }
+
+  .ai-messages {
+    min-height: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .message-bubble {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .tool-card,
+  .study-progress-card {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .ai-input-area {
+    flex-shrink: 0;
+  }
+
+  .ai-input-area textarea {
+    min-width: 0;
+    font-size: 16px;
+  }
+
+  .send-button,
+  .stop-button {
+    flex-shrink: 0;
   }
 }

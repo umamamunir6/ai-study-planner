@@ -11,7 +11,7 @@ export default function AIChat() {
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  const { messages, sendMessage, status, stop } = useChat({
+  const { messages, sendMessage, status, stop, error, regenerate, } = useChat({
     transport: new DefaultChatTransport({
       api: "/api/chat",
     }),
@@ -326,7 +326,29 @@ export default function AIChat() {
               </div>
             </div>
           ))}
+                    {/* CHAT ERROR */}
+          {error && (
+  <div className="chat-error-card">
+    <div className="chat-error-icon">⚠️</div>
 
+    <div className="chat-error-content">
+      <strong>We couldn't complete that response</strong>
+
+      <p>
+        The AI service may be temporarily unavailable.
+        Your conversation is still here.
+      </p>
+
+      <button
+        type="button"
+        onClick={() => regenerate()}
+        className="retry-button"
+      >
+        ↻ Retry response
+      </button>
+    </div>
+  </div>
+)}
           {/* THINKING INDICATOR */}
           {status === "submitted" && (
             <div className="message-row assistant-row">
