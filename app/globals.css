@@ -592,3 +592,307 @@ a {
     flex-shrink: 0;
   }
 }
+/* ================================
+   FE-AA1 - Buttons with a Brain
+   ================================ */
+
+.button-demo {
+  min-height: calc(100vh - 70px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.button-demo-card {
+  width: min(650px, 100%);
+  padding: 48px;
+  text-align: center;
+  border-radius: 24px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+}
+
+.demo-label {
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6366f1;
+}
+
+.button-demo-card h1 {
+  margin: 0;
+  font-size: 36px;
+  font-weight: 800;
+}
+
+.demo-description {
+  margin: 12px auto 35px;
+  max-width: 500px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+/* Main button */
+
+.brain-button {
+  position: relative;
+  min-width: 230px;
+  height: 54px;
+  padding: 0 26px;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  color: white;
+  background: #6366f1;
+
+  transition:
+    transform 180ms ease-out,
+    background-color 220ms ease,
+    box-shadow 220ms ease,
+    opacity 180ms ease;
+}
+
+.brain-button:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.25);
+}
+
+.brain-button:active:not(:disabled) {
+  transform: translateY(1px) scale(0.98);
+}
+
+.brain-button:focus-visible {
+  outline: 3px solid #a5b4fc;
+  outline-offset: 4px;
+}
+
+.brain-button:disabled {
+  cursor: wait;
+  opacity: 0.9;
+}
+
+/* State colors */
+
+.brain-button-loading {
+  background: #4f46e5;
+}
+
+.brain-button-success {
+  background: #16a34a;
+}
+
+.brain-button-error {
+  background: #dc2626;
+}
+
+/* Content */
+
+.brain-button-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/*
+  All states occupy the same space.
+  This prevents layout jumps while labels transition.
+*/
+
+.button-label,
+.button-state {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  white-space: nowrap;
+
+  transition:
+    opacity 180ms ease-out,
+    transform 180ms ease-out;
+}
+
+.button-label {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.button-label-hidden {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.button-state {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.button-state-hidden {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+/* Spinner */
+
+.spinner {
+  width: 17px;
+  height: 17px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: white;
+  border-radius: 50%;
+
+  animation: brain-spin 700ms linear infinite;
+}
+
+/* Success */
+
+.success-state {
+  animation: success-pop 300ms ease-out;
+}
+
+.success-icon,
+.error-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  font-weight: 800;
+}
+
+.success-icon,
+.error-icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Error */
+
+.error-state {
+  animation: error-shake 350ms ease-out;
+}
+
+/* Demo controls */
+
+.demo-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.demo-controls button {
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: white;
+  cursor: pointer;
+
+  transition:
+    transform 160ms ease-out,
+    background-color 160ms ease-out;
+}
+
+.demo-controls button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: #f9fafb;
+}
+
+.demo-controls button:focus-visible {
+  outline: 3px solid #c7d2fe;
+  outline-offset: 2px;
+}
+
+.demo-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.state-display {
+  margin-top: 24px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.motion-note {
+  margin-top: 35px;
+  padding: 18px;
+  border-radius: 14px;
+  text-align: left;
+  background: #f9fafb;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.motion-note strong {
+  color: #111827;
+}
+
+/* Animations */
+
+@keyframes brain-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes success-pop {
+  0% {
+    transform: scale(0.94);
+  }
+
+  60% {
+    transform: scale(1.04);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes error-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+
+  75% {
+    transform: translateX(-3px);
+  }
+}
+
+/* Reduced motion */
+
+@media (prefers-reduced-motion: reduce) {
+  .brain-button,
+  .button-label,
+  .button-state,
+  .demo-controls button {
+    transition: none;
+  }
+
+  .spinner {
+    animation: none;
+  }
+
+  .success-state,
+  .error-state {
+    animation: none;
+  }
+}
