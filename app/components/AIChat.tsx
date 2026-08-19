@@ -7,6 +7,9 @@ import StudyProgressCard from "./StudyProgressCard";
 
 export default function AIChat() {
   const [input, setInput] = useState("");
+  const handleSuggestion = (text: string) => {
+  setInput(text);
+};
   const [isNearBottom, setIsNearBottom] = useState(true);
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -116,32 +119,32 @@ export default function AIChat() {
 
               <div className="suggestion-list">
                 <button
-                  onClick={() =>
-                    setInput(
-                      "Explain binary search in simple words."
-                    )
-                  }
-                >
+  type="button"
+  aria-label="Explain binary search"
+  onClick={() =>
+    handleSuggestion("Explain binary search in simple words.")
+  }
+>
                   Explain binary search
                 </button>
 
                 <button
-                  onClick={() =>
-                    setInput(
-                      "Make me a study plan for my exams."
-                    )
-                  }
-                >
+    type="button"
+    aria-label="Make a study plan"
+    onClick={() =>
+      handleSuggestion("Make me a study plan for my exams.")
+    }
+  >
                   Make a study plan
                 </button>
 
                 <button
-                  onClick={() =>
-                    setInput(
-                      "Show me my current study progress."
-                    )
-                  }
-                >
+    type="button"
+    aria-label="Show my study progress"
+    onClick={() =>
+      handleSuggestion("Show me my current study progress.")
+    }
+  >
                   📊 Show my study progress
                 </button>
               </div>
@@ -412,12 +415,13 @@ export default function AIChat() {
             </button>
           ) : (
             <button
-              type="submit"
-              className="send-button"
-              disabled={!input.trim()}
-            >
-              ↑
-            </button>
+  type="submit"
+  className="send-button"
+  disabled={!input.trim()}
+  aria-label="Send message"
+>
+  ↑
+</button>
           )}
         </form>
 
