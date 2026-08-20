@@ -15,9 +15,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-gray-50 text-gray-900">
-         <header>
-    <Navbar />
-  </header>
+        <header>
+          <Navbar />
+        </header>
+
         <main>{children}</main>
       </body>
     </html>

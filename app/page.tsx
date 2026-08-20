@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 type Subject = {
   id: number;
@@ -19,20 +20,25 @@ export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    const savedSubjects = localStorage.getItem(
-      "study-planner-subjects"
-    );
+    try {
+      const savedSubjects = localStorage.getItem(
+        "study-planner-subjects"
+      );
 
-    const savedTasks = localStorage.getItem(
-      "study-planner-tasks"
-    );
+      const savedTasks = localStorage.getItem(
+        "study-planner-tasks"
+      );
 
-    if (savedSubjects) {
-      setSubjects(JSON.parse(savedSubjects));
-    }
+      if (savedSubjects) {
+        setSubjects(JSON.parse(savedSubjects));
+      }
 
-    if (savedTasks) {
-      setTasks(JSON.parse(savedTasks));
+      if (savedTasks) {
+        setTasks(JSON.parse(savedTasks));
+      }
+    } catch {
+      setSubjects([]);
+      setTasks([]);
     }
   }, []);
 
@@ -48,8 +54,6 @@ export default function Home() {
       <section className="border-b bg-gradient-to-b from-blue-50 to-white">
         <div className="mx-auto max-w-7xl px-6 py-16 sm:py-20 lg:py-24">
           <div className="max-w-3xl">
-            
-
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
               Study smarter.
               <br />
@@ -63,42 +67,47 @@ export default function Home() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <a
+              <Link
                 href="/planner"
                 className="rounded-lg bg-blue-600 px-5 py-3 font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 ✨ Create Study Plan
-              </a>
+              </Link>
 
-              <a
+              <Link
                 href="/dashboard"
                 className="rounded-lg border bg-white px-5 py-3 font-medium text-gray-700 transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 View Dashboard
-              </a>
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
       {/* QUICK STATS */}
-      <section className="mx-auto max-w-7xl px-6 py-10">
+      <section
+        aria-labelledby="quick-stats-heading"
+        className="mx-auto max-w-7xl px-6 py-10"
+      >
+        <h2 id="quick-stats-heading" className="sr-only">
+          Study statistics
+        </h2>
+
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="rounded-2xl border bg-white p-6 shadow-sm">
-            <p className="text-sm text-gray-500">
-              Subjects
-            </p>
+            <p className="text-sm text-gray-500">Subjects</p>
 
             <p className="mt-2 text-3xl font-bold">
               {subjects.length}
             </p>
 
-            <a
+            <Link
               href="/subjects"
-              className="mt-3 inline-block text-sm font-medium text-blue-600 hover:underline"
+              className="mt-3 inline-block text-sm font-medium text-blue-600 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Manage subjects →
-            </a>
+            </Link>
           </div>
 
           <div className="rounded-2xl border bg-white p-6 shadow-sm">
@@ -110,12 +119,12 @@ export default function Home() {
               {remainingTasks}
             </p>
 
-            <a
+            <Link
               href="/tasks"
-              className="mt-3 inline-block text-sm font-medium text-blue-600 hover:underline"
+              className="mt-3 inline-block text-sm font-medium text-blue-600 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               View tasks →
-            </a>
+            </Link>
           </div>
 
           <div className="rounded-2xl border bg-white p-6 shadow-sm">
@@ -135,9 +144,15 @@ export default function Home() {
       </section>
 
       {/* FEATURES */}
-      <section className="mx-auto max-w-7xl px-6 pb-16">
+      <section
+        aria-labelledby="features-heading"
+        className="mx-auto max-w-7xl px-6 pb-16"
+      >
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2
+            id="features-heading"
+            className="text-2xl font-bold text-gray-900"
+          >
             Everything you need to study effectively
           </h2>
 
@@ -148,72 +163,75 @@ export default function Home() {
         </div>
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-          <a
+          <Link
             href="/subjects"
-            className="rounded-2xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+            className="rounded-2xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <div className="mb-4 text-3xl">📚</div>
+            <div className="mb-4 text-3xl" aria-hidden="true">
+              📚
+            </div>
 
-            <h3 className="font-semibold">
-              Subjects
-            </h3>
+            <h3 className="font-semibold">Subjects</h3>
 
             <p className="mt-2 text-sm leading-6 text-gray-600">
               Manage the subjects you are currently studying.
             </p>
-          </a>
+          </Link>
 
-          <a
+          <Link
             href="/tasks"
-            className="rounded-2xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+            className="rounded-2xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <div className="mb-4 text-3xl">✅</div>
+            <div className="mb-4 text-3xl" aria-hidden="true">
+              ✅
+            </div>
 
-            <h3 className="font-semibold">
-              Tasks
-            </h3>
+            <h3 className="font-semibold">Tasks</h3>
 
             <p className="mt-2 text-sm leading-6 text-gray-600">
               Track assignments, deadlines, and study tasks.
             </p>
-          </a>
+          </Link>
 
-          <a
+          <Link
             href="/calendar"
-            className="rounded-2xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+            className="rounded-2xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <div className="mb-4 text-3xl">📅</div>
+            <div className="mb-4 text-3xl" aria-hidden="true">
+              📅
+            </div>
 
-            <h3 className="font-semibold">
-              Calendar
-            </h3>
+            <h3 className="font-semibold">Calendar</h3>
 
             <p className="mt-2 text-sm leading-6 text-gray-600">
               See your upcoming study tasks and deadlines.
             </p>
-          </a>
+          </Link>
 
-          <a
+          <Link
             href="/ai-assistant"
-            className="rounded-2xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+            className="rounded-2xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <div className="mb-4 text-3xl">🤖</div>
+            <div className="mb-4 text-3xl" aria-hidden="true">
+              🤖
+            </div>
 
-            <h3 className="font-semibold">
-              AI Assistant
-            </h3>
+            <h3 className="font-semibold">AI Assistant</h3>
 
             <p className="mt-2 text-sm leading-6 text-gray-600">
               Get personalized help with your studies.
             </p>
-          </a>
+          </Link>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="border-t bg-gray-50">
+      <section
+        aria-labelledby="cta-heading"
+        className="border-t bg-gray-50"
+      >
         <div className="mx-auto max-w-7xl px-6 py-14 text-center">
-          <h2 className="text-2xl font-bold">
+          <h2 id="cta-heading" className="text-2xl font-bold">
             Ready to organize your studies?
           </h2>
 
@@ -222,12 +240,12 @@ export default function Home() {
             into real tasks on your calendar.
           </p>
 
-          <a
+          <Link
             href="/planner"
-            className="mt-6 inline-block rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition hover:bg-blue-700"
+            className="mt-6 inline-block rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 hover:bg-blue-700"
           >
             Start Planning →
-          </a>
+          </Link>
         </div>
       </section>
     </main>
