@@ -216,12 +216,13 @@ const [studyData, setStudyData] = useState<{
               </div>
 
               <div
-                className={`message-bubble ${
-                  message.role === "user"
-                    ? "user-message"
-                    : "assistant-message"
-                }`}
-              >
+  className={`message-bubble ${
+    message.role === "user"
+      ? "user-message"
+      : "assistant-message"
+  }`}
+  aria-live={message.role === "assistant" ? "polite" : undefined}
+>
                 {message.parts.map((part, index) => {
 
                   /*
