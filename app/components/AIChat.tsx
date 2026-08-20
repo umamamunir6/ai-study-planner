@@ -5,12 +5,55 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import StudyProgressCard from "./StudyProgressCard";
 
+type Subject = {
+  id: number;
+  name: string;
+  description: string;
+  color: string;
+};
+
+type Task = {
+  id: number;
+  title: string;
+  subject: string;
+  dueDate: string;
+  priority: "Low" | "Medium" | "High";
+  completed: boolean;
+};
+
 export default function AIChat() {
-  const [input, setInput] = useState("");
+const [input, setInput] = useState("");
+
+const [studyData, setStudyData] = useState<{
+  subjects: Subject[];
+  tasks: Task[];
+}>({
+  subjects: [],
+  tasks: [],
+});
   const handleSuggestion = (text: string) => {
   setInput(text);
 };
   const [isNearBottom, setIsNearBottom] = useState(true);
+  useEffect(() => {
+  const savedSubjects = localStorage.getItem(
+    "study-planner-subjects"
+  );
+
+  const savedTasks = localStorage.getItem(
+    "study-planner-tasks"
+  );
+
+  setStudyData({
+    subjects: savedSubjects
+      ? JSON.parse(savedSubjects)
+      : [],
+
+    tasks: savedTasks
+      ? JSON.parse(savedTasks)
+      : [],
+  });
+}, []);
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
@@ -76,10 +119,16 @@ export default function AIChat() {
 
     if (!trimmedInput || isGenerating) return;
 
-    sendMessage({
-      text: trimmedInput,
-    });
-
+  sendMessage(
+  {
+    text: trimmedInput,
+  },
+  {
+    body: {
+      studyData,
+    },
+  }
+);
     setInput("");
   };
 

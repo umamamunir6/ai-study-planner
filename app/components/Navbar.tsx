@@ -25,7 +25,6 @@ const Navbar = () => {
             AI Planner
           </Link>
 
-          {/* FE-06: Streaming AI Assistant */}
           <Link href="/ai-assistant" className="hover:text-blue-600">
             AI Assistant
           </Link>
@@ -40,10 +39,6 @@ const Navbar = () => {
 
           <Link href="/calendar" className="hover:text-blue-600">
             Calendar
-          </Link>
-
-          <Link href="/health" className="hover:text-blue-600">
-            Health
           </Link>
         </div>
       </div>

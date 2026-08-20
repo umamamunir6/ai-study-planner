@@ -12,57 +12,56 @@ type Task = {
   priority: Priority;
   completed: boolean;
 };
+type Subject = {
+  id: number;
+  name: string;
+  description: string;
+  color: string;
+};
 
-const initialTasks: Task[] = [
-  {
-    id: 1,
-    title: "Review Binary Search",
-    subject: "Data Structures & Algorithms",
-    dueDate: "2026-08-22",
-    priority: "High",
-    completed: false,
-  },
-  {
-    id: 2,
-    title: "Practice React Components",
-    subject: "Web Development",
-    dueDate: "2026-08-24",
-    priority: "Medium",
-    completed: false,
-  },
-];
+const initialTasks: Task[] = [];
 
 export default function Tasks() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [title, setTitle] = useState("");
-  const [subject, setSubject] = useState("");
+const [tasks, setTasks] = useState<Task[]>([]);
+const [subjects, setSubjects] = useState<Subject[]>([]);
+const [isLoaded, setIsLoaded] = useState(false);
+const [title, setTitle] = useState("");
+const [subject, setSubject] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [priority, setPriority] = useState<Priority>("Medium");
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  useEffect(() => {
-    const saved = localStorage.getItem("study-planner-tasks");
+ useEffect(() => {
+  const saved = localStorage.getItem("study-planner-tasks");
 
-    if (saved) {
-      setTasks(JSON.parse(saved));
-    } else {
-      setTasks(initialTasks);
-      localStorage.setItem(
-        "study-planner-tasks",
-        JSON.stringify(initialTasks)
-      );
-    }
-  }, []);
+  if (saved) {
+    setTasks(JSON.parse(saved));
+  } else {
+    setTasks(initialTasks);
+  }
 
-  useEffect(() => {
-    if (tasks.length > 0) {
-      localStorage.setItem(
-        "study-planner-tasks",
-        JSON.stringify(tasks)
-      );
-    }
-  }, [tasks]);
+  setIsLoaded(true);
+}, []);
+
+useEffect(() => {
+  const savedSubjects = localStorage.getItem(
+    "study-planner-subjects"
+  );
+
+  if (savedSubjects) {
+    setSubjects(JSON.parse(savedSubjects));
+  }
+}, []);
+
+useEffect(() => {
+  if (!isLoaded) return;
+
+  localStorage.setItem(
+    "study-planner-tasks",
+    JSON.stringify(tasks)
+  );
+}, [tasks, isLoaded]);
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -174,36 +173,48 @@ export default function Tasks() {
             </div>
 
             <div className="mb-4">
-              <label
-                htmlFor="task-subject"
-                className="mb-2 block text-sm font-medium"
-              >
-                Subject
-              </label>
+  <label
+    htmlFor="task-subject"
+    className="mb-2 block text-sm font-medium"
+  >
+    Subject
+  </label>
 
-              <input
-                id="task-subject"
-                type="text"
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                placeholder="e.g. Data Structures"
-                className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-                aria-invalid={!!errors.subject}
-                aria-describedby={
-                  errors.subject ? "subject-error" : undefined
-                }
-              />
+  {subjects.length === 0 ? (
+    <p className="rounded-lg border border-yellow-300 bg-yellow-50 p-3 text-sm text-yellow-800">
+      No subjects available. Please add a subject first.
+    </p>
+  ) : (
+    <select
+      id="task-subject"
+      value={subject}
+      onChange={(e) => setSubject(e.target.value)}
+      className="w-full rounded-lg border px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+      aria-invalid={!!errors.subject}
+      aria-describedby={
+        errors.subject ? "subject-error" : undefined
+      }
+    >
+      <option value="">Select a subject</option>
 
-              {errors.subject && (
-                <p
-                  id="subject-error"
-                  role="alert"
-                  className="mt-1 text-sm text-red-600"
-                >
-                  {errors.subject}
-                </p>
-              )}
-            </div>
+      {subjects.map((item) => (
+        <option key={item.id} value={item.name}>
+          {item.name}
+        </option>
+      ))}
+    </select>
+  )}
+
+  {errors.subject && (
+    <p
+      id="subject-error"
+      role="alert"
+      className="mt-1 text-sm text-red-600"
+    >
+      {errors.subject}
+    </p>
+  )}
+</div>
 
             <div className="mb-4">
               <label
