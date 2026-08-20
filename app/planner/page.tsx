@@ -9,16 +9,6 @@ type Subject = {
   color: string;
 };
 
-type Priority = "Low" | "Medium" | "High";
-
-type Task = {
-  id: number;
-  title: string;
-  subject: string;
-  dueDate: string;
-  priority: Priority;
-  completed: boolean;
-};
 
 type StudySession = {
   id: number;
@@ -29,7 +19,6 @@ type StudySession = {
 
 export default function Planner() {
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedSubject, setSelectedSubject] = useState("");
   const [days, setDays] = useState("7");
   const [hours, setHours] = useState("2");
@@ -52,7 +41,6 @@ useEffect(() => {
     }
   }
 }, []);
-
   const generatePlan = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -143,44 +131,43 @@ useEffect(() => {
     }
   };
 
-  const addPlanToTasks = () => {
-    if (plan.length === 0) {
-      setMessage("Generate a study plan first.");
-      return;
-    }
+const addPlanToTasks = () => {
+  if (plan.length === 0) {
+    setMessage("Generate a study plan first.");
+    return;
+  }
 
-    const newTasks: Task[] = plan.map(
-      (session, index) => ({
-        id: Date.now() + index,
-        title: session.title,
-        subject: session.subject,
-        dueDate: session.date,
-        priority: "Medium",
-        completed: false,
-      })
-    );
-const savedTasks = localStorage.getItem(
-  "study-planner-tasks"
-);
+  const savedTasks = localStorage.getItem(
+    "study-planner-tasks"
+  );
 
-const existingTasks: Task[] = savedTasks
-  ? JSON.parse(savedTasks)
-  : [];
+  const existingTasks = savedTasks
+    ? JSON.parse(savedTasks)
+    : [];
 
-const updatedTasks = [...existingTasks, ...newTasks];
+  const newTasks = plan.map((session, index) => ({
+    id: Date.now() + index,
+    title: session.title,
+    subject: session.subject,
+    dueDate: session.date,
+    priority: "Medium",
+    completed: false,
+  }));
 
-setTasks(updatedTasks);
+  const updatedTasks = [
+    ...existingTasks,
+    ...newTasks,
+  ];
 
-localStorage.setItem(
-  "study-planner-tasks",
-  JSON.stringify(updatedTasks)
-);
+  localStorage.setItem(
+    "study-planner-tasks",
+    JSON.stringify(updatedTasks)
+  );
 
-    setMessage(
-      `${newTasks.length} AI-generated task(s) added successfully.`
-    );
-  };
-
+  setMessage(
+    `${newTasks.length} AI-generated task(s) added successfully.`
+  );
+};
   return (
     <main className="mx-auto max-w-7xl px-6 py-10">
       <div className="mb-8">
