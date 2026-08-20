@@ -37,29 +37,21 @@ export default function Planner() {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const savedSubjects = localStorage.getItem(
-      "study-planner-subjects"
-    );
+useEffect(() => {
+  const savedSubjects = localStorage.getItem(
+    "study-planner-subjects"
+  );
 
-    const savedTasks = localStorage.getItem(
-      "study-planner-tasks"
-    );
+  if (savedSubjects) {
+    const parsedSubjects = JSON.parse(savedSubjects);
 
-    if (savedSubjects) {
-      const parsedSubjects = JSON.parse(savedSubjects);
+    setSubjects(parsedSubjects);
 
-      setSubjects(parsedSubjects);
-
-      if (parsedSubjects.length > 0) {
-        setSelectedSubject(parsedSubjects[0].name);
-      }
+    if (parsedSubjects.length > 0) {
+      setSelectedSubject(parsedSubjects[0].name);
     }
-
-    if (savedTasks) {
-      setTasks(JSON.parse(savedTasks));
-    }
-  }, []);
+  }
+}, []);
 
   const generatePlan = async (e: FormEvent) => {
     e.preventDefault();
@@ -167,15 +159,22 @@ export default function Planner() {
         completed: false,
       })
     );
+const savedTasks = localStorage.getItem(
+  "study-planner-tasks"
+);
 
-    const updatedTasks = [...tasks, ...newTasks];
+const existingTasks: Task[] = savedTasks
+  ? JSON.parse(savedTasks)
+  : [];
 
-    setTasks(updatedTasks);
+const updatedTasks = [...existingTasks, ...newTasks];
 
-    localStorage.setItem(
-      "study-planner-tasks",
-      JSON.stringify(updatedTasks)
-    );
+setTasks(updatedTasks);
+
+localStorage.setItem(
+  "study-planner-tasks",
+  JSON.stringify(updatedTasks)
+);
 
     setMessage(
       `${newTasks.length} AI-generated task(s) added successfully.`
