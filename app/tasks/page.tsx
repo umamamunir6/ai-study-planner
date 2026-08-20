@@ -32,13 +32,11 @@ const [subject, setSubject] = useState("");
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
- useEffect(() => {
+useEffect(() => {
   const saved = localStorage.getItem("study-planner-tasks");
 
   if (saved) {
     setTasks(JSON.parse(saved));
-  } else {
-    setTasks(initialTasks);
   }
 
   setIsLoaded(true);
