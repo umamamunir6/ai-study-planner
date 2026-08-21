@@ -7,9 +7,29 @@ import {
 import { beforeEach, describe, expect, it } from "vitest";
 import Tasks from "@/app/tasks/page";
 
+const testSubject = {
+  id: 1,
+  name: "Data Structures & Algorithms",
+  description: "Algorithms and data structures",
+};
+
+const testTask = {
+  id: 1,
+  title: "Review Binary Search",
+  subject: "Data Structures & Algorithms",
+  dueDate: "2026-08-25",
+  priority: "Medium",
+  completed: false,
+};
+
 describe("Tasks", () => {
   beforeEach(() => {
     localStorage.clear();
+
+    localStorage.setItem(
+      "subjects",
+      JSON.stringify([testSubject])
+    );
   });
 
   it("renders the Tasks page", () => {
@@ -53,7 +73,9 @@ describe("Tasks", () => {
     fireEvent.change(
       screen.getByLabelText(/task title/i),
       {
-        target: { value: "Study Binary Search" },
+        target: {
+          value: "Study Binary Search",
+        },
       }
     );
 
@@ -69,7 +91,9 @@ describe("Tasks", () => {
     fireEvent.change(
       screen.getByLabelText(/due date/i),
       {
-        target: { value: "2026-08-25" },
+        target: {
+          value: "2026-08-25",
+        },
       }
     );
 
@@ -97,10 +121,17 @@ describe("Tasks", () => {
   });
 
   it("marks a task as completed", () => {
+    localStorage.setItem(
+  "study-planner-tasks",
+  JSON.stringify([testTask])
+);;
+
     render(<Tasks />);
 
     const checkbox =
       screen.getAllByRole("checkbox")[0];
+
+    expect(checkbox).not.toBeChecked();
 
     fireEvent.click(checkbox);
 
@@ -108,19 +139,23 @@ describe("Tasks", () => {
   });
 
   it("deletes a task", () => {
+    localStorage.setItem(
+  "study-planner-tasks",
+  JSON.stringify([testTask])
+);
+
     render(<Tasks />);
 
-    const deleteButtons =
-      screen.getAllByRole("button", {
+    const deleteButton =
+      screen.getByRole("button", {
         name: /delete/i,
       });
 
-    const firstTaskTitle =
-      screen.getByText("Review Binary Search");
+    expect(
+      screen.getByText("Review Binary Search")
+    ).toBeInTheDocument();
 
-    expect(firstTaskTitle).toBeInTheDocument();
-
-    fireEvent.click(deleteButtons[0]);
+    fireEvent.click(deleteButton);
 
     expect(
       screen.queryByText("Review Binary Search")

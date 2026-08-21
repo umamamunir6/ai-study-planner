@@ -91,9 +91,19 @@ describe("AIChat", () => {
 
     fireEvent.submit(input.closest("form")!);
 
-    expect(mockSendMessage).toHaveBeenCalledWith({
-      text: "Explain binary search",
-    });
+    expect(mockSendMessage).toHaveBeenCalledWith(
+  {
+    text: "Explain binary search",
+  },
+  {
+    body: {
+      studyData: {
+        subjects: [],
+        tasks: [],
+      },
+    },
+  }
+);
   });
 
   it("shows the loading state while a response is being submitted", () => {

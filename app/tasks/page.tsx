@@ -12,18 +12,12 @@ type Task = {
   priority: Priority;
   completed: boolean;
 };
-type Subject = {
-  id: number;
-  name: string;
-  description: string;
-  color: string;
-};
-
-const initialTasks: Task[] = [];
 
 export default function Tasks() {
 const [tasks, setTasks] = useState<Task[]>([]);
-const [subjects, setSubjects] = useState<Subject[]>([]);
+const [subjects, setSubjects] = useState<string[]>([
+  "Data Structures & Algorithms",
+]);
 const [isLoaded, setIsLoaded] = useState(false);
 const [title, setTitle] = useState("");
 const [subject, setSubject] = useState("");
@@ -48,7 +42,11 @@ useEffect(() => {
   );
 
   if (savedSubjects) {
-    setSubjects(JSON.parse(savedSubjects));
+    const parsedSubjects = JSON.parse(savedSubjects);
+
+    if (parsedSubjects.length > 0) {
+      setSubjects(parsedSubjects);
+    }
   }
 }, []);
 
@@ -194,12 +192,11 @@ useEffect(() => {
       }
     >
       <option value="">Select a subject</option>
-
-      {subjects.map((item) => (
-        <option key={item.id} value={item.name}>
-          {item.name}
-        </option>
-      ))}
+{subjects.map((item) => (
+  <option key={item} value={item}>
+    {item}
+  </option>
+))}
     </select>
   )}
 
