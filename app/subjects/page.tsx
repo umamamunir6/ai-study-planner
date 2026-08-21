@@ -73,11 +73,39 @@ useEffect(() => {
     setError("");
   };
 
-  const deleteSubject = (id: number) => {
-    setSubjects((current) =>
-      current.filter((subject) => subject.id !== id)
+const deleteSubject = (id: number) => {
+  const subjectToDelete = subjects.find(
+    (subject) => subject.id === id
+  );
+
+  if (!subjectToDelete) return;
+
+  // Remove the subject
+  setSubjects((current) =>
+    current.filter((subject) => subject.id !== id)
+  );
+
+  // Remove all tasks belonging to the deleted subject
+  const savedTasks = localStorage.getItem(
+    "study-planner-tasks"
+  );
+
+  if (savedTasks) {
+    const tasks = JSON.parse(savedTasks);
+
+    const remainingTasks = tasks.filter(
+      (task: { subject: string }) =>
+        task.subject !== subjectToDelete.name
     );
-  };
+
+    localStorage.setItem(
+      "study-planner-tasks",
+      JSON.stringify(remainingTasks)
+    );
+  }
+};
+
+
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-10">

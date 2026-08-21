@@ -22,28 +22,44 @@ export const createStudyProgressTool = (
   studyData: StudyData
 ) => ({
   description:
-    "Get the student's current study progress, including overall completion and progress for each subject.",
+    "Get the student's current study progress, including overall completion and progress for every subject that has tasks. This includes tasks belonging to subjects that may have been deleted.",
 
   inputSchema: z.object({}),
 
   execute: async () => {
     const { subjects, tasks } = studyData;
 
-    const subjectProgress = subjects.map((subject) => {
-      const subjectTasks = tasks.filter(
-        (task) => task.subject === subject.name
-      );
+    // Start with currently active subjects.
+    const subjectNames = new Set(
+      subjects.map((subject) => subject.name)
+    );
 
-      const completed = subjectTasks.filter(
-        (task) => task.completed
-      ).length;
-
-      return {
-        name: subject.name,
-        completed,
-        total: subjectTasks.length,
-      };
+    // Also include subjects that still have tasks but are no longer
+    // present in the current subjects list.
+    tasks.forEach((task) => {
+      if (task.subject.trim()) {
+        subjectNames.add(task.subject);
+      }
     });
+
+    const subjectProgress = Array.from(subjectNames).map(
+      (subjectName) => {
+        const subjectTasks = tasks.filter(
+          (task) => task.subject === subjectName
+        );
+
+        const completed = subjectTasks.filter(
+          (task) => task.completed
+        ).length;
+
+        return {
+          name: subjectName,
+          completed,
+          total: subjectTasks.length,
+          remaining: subjectTasks.length - completed,
+        };
+      }
+    );
 
     const completedTasks = tasks.filter(
       (task) => task.completed
