@@ -281,13 +281,18 @@ const addPlanToTasks = () => {
           )}
 
           {message && (
-            <p
-              role="status"
-              className="mt-4 rounded-lg bg-blue-50 p-3 text-sm text-blue-700"
-            >
-              {message}
-            </p>
-          )}
+  <p
+    role="status"
+    aria-live="polite"
+    className={`mt-4 rounded-lg p-3 text-sm ${
+      message.includes("successfully")
+        ? "bg-green-50 text-green-700"
+        : "bg-blue-50 text-blue-700"
+    }`}
+  >
+    {message}
+  </p>
+)}
         </section>
 
         {/* PLAN */}
