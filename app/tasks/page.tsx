@@ -12,11 +12,23 @@ type Task = {
   priority: Priority;
   completed: boolean;
 };
-
+type Subject = {
+  id: number;
+  name: string;
+  description: string;
+  color: string;
+};
 export default function Tasks() {
 const [tasks, setTasks] = useState<Task[]>([]);
-const [subjects, setSubjects] = useState<string[]>([
-  "Data Structures & Algorithms",
+
+
+const [subjects, setSubjects] = useState<Subject[]>([
+  {
+    id: 1,
+    name: "Data Structures & Algorithms",
+    description: "Algorithms and data structures",
+    color: "blue",
+  },
 ]);
 const [isLoaded, setIsLoaded] = useState(false);
 const [title, setTitle] = useState("");
@@ -193,8 +205,8 @@ useEffect(() => {
     >
       <option value="">Select a subject</option>
 {subjects.map((item) => (
-  <option key={item} value={item}>
-    {item}
+  <option key={item.id} value={item.name}>
+    {item.name}
   </option>
 ))}
     </select>
