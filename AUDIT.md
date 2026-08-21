@@ -155,6 +155,10 @@ WAVE also reported no contrast errors on the tested pages.
 
 The remaining WAVE findings were reviewed and did not indicate additional critical accessibility errors requiring changes.
 
+### WAVE Audit Screenshot
+
+![WAVE Accessibility Audit](screenshots/wave-audit.png)
+
 ---
 
 ## 5. Keyboard-Only Testing
@@ -192,3 +196,22 @@ To improve accessibility for streamed responses, the assistant message container
 
 ```tsx
 aria-live="polite"
+
+This allows assistive technologies to announce new AI content without aggressively interrupting the user.
+
+The Stop button is implemented as a native keyboard-accessible <button> and is available while an AI response is streaming.
+
+7. Performance Improvements
+
+Performance optimization focused on reducing unnecessary client-side work and improving the efficiency of interactive pages.
+
+Improvements included:
+
+Reduced unnecessary client-side processing.
+Simplified task handling and rendering.
+Improved form handling and validation.
+Reduced unnecessary state updates where possible.
+Improved page structure and semantic HTML.
+Verified performance changes through repeated Lighthouse mobile audits.
+
+The largest performance improvements were made to the Home, Planner, AI Assistant, and Tasks pages.

@@ -432,3 +432,47 @@ AI-generated suggestions were reviewed and adapted to the application's requirem
 Implementation was verified by running the application, testing functionality, running production builds, and using Lighthouse and WAVE for accessibility and performance verification.
 
 AI tools were therefore used as part of the development workflow, while final implementation and verification were performed on the project itself.
+
+## Test Results
+
+The application includes component tests using Vitest and React Testing Library.
+
+Current test results:
+
+- 3 test files passed
+- 18 tests passed
+- Tasks component: 5 tests
+- StudyProgressCard component: 6 tests
+- AIChat component: 7 tests
+
+![Test Results](screenshots/tests.png)
+
+The tests cover rendering, form validation, task creation, task completion,
+task deletion, AI chat behavior, and study progress display.
+
+## Known Limitations
+
+- Study data is stored in browser localStorage and is not synchronized across devices.
+- There is currently no user authentication or account system.
+- AI responses depend on the availability of the configured AI provider.
+- Study progress is based on the tasks and subjects stored in the current browser.
+
+## Future Improvements
+
+- Add user authentication and cloud-based data persistence.
+- Synchronize study data across multiple devices.
+- Add calendar integration and reminders.
+- Provide more advanced study analytics.
+- Improve AI personalization using longer-term study history.
+- Add automated end-to-end testing for critical production flows.
+
+## Rollback and Monitoring
+
+The application is deployed through Vercel and connected to the GitHub repository.
+
+If a production deployment introduces a regression, the previous known-good
+deployment can be restored through Vercel or the last stable Git commit can
+be redeployed.
+
+Deployment and runtime issues can be investigated using Vercel deployment
+logs and build logs.
